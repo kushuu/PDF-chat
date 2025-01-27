@@ -1,0 +1,1 @@
+streamlit run streamlit.py --server.runOnSave true --server.headless true

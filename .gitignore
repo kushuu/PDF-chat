@@ -1,0 +1,4 @@
+chroma_storage/
+.venv/
+input_pdfs/
+__pycache__/
