@@ -3,6 +3,8 @@ from streamlit_pdf_viewer import pdf_viewer
 import streamlit as st
 from llm import PDFChatbot
 
+st.set_page_config(layout="wide")
+
 
 def initialize_session_state():
     if "pdf_is_loaded" not in st.session_state:
@@ -20,7 +22,7 @@ def main():
     <style>
     .stForm {
         position: fixed;
-        bottom: 0;
+        bottom: 10px;
         left: 350px;
         right: 0;
         width: 100%;
@@ -48,7 +50,7 @@ def main():
             pdf_viewer(input=st.session_state.pdf_bytes)
 
     if st.session_state['pdf_is_loaded']:
-        chat_container = st.container(height=400)
+        chat_container = st.container(height=500)
         with chat_container:
             for message in st.session_state.messages:
                 if message["role"] == "user":
