@@ -1,9 +1,16 @@
+import ollama
 from streamlit_pdf_viewer import pdf_viewer
 
 import streamlit as st
 from llm import PDFChatbot
 
 st.set_page_config(layout="wide")
+
+
+def get_models_list():
+    models = ollama.list()
+    models = [m.model for m in models.models]
+    return [None, *models]
 
 
 def initialize_session_state():
@@ -13,6 +20,8 @@ def initialize_session_state():
         st.session_state.messages = []
     if "pdf_chatbot" not in st.session_state:
         st.session_state.pdf_chatbot = None
+    if "model_selected" not in st.session_state:
+        st.session_state.model_selected = None
 
 
 def main():
@@ -39,8 +48,13 @@ def main():
     """, unsafe_allow_html=True)
 
     with st.sidebar:
+        model_name = st.selectbox(
+            "Select a model", get_models_list()
+        )
         pdf = st.file_uploader("Upload your PDF", type=["pdf"])
         if pdf is not None and not st.session_state['pdf_is_loaded']:
+            st.session_state.model_selected = model_name
+            print('model_selected', st.session_state.model_selected)
             st.session_state.pdf_bytes = pdf.getvalue()
             st.session_state["pdf_chatbot"] = PDFChatbot()
             st.session_state.pdf_chatbot.process_pdf(pdf)
